@@ -1,0 +1,18 @@
+# DS_Store
+.DS_Store
+
+# env
+.env
+
+# mysql
+/mysql/data
+
+.idea
+.mypy_cache
+.vscode
+__pycache__
+env
+docs_build
+venv
+docs.zip
+archive.zip
