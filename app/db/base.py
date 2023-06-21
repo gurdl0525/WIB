@@ -71,7 +71,14 @@ def find_tech_by_id(content: str, company_id: str, notice_id: int):
         record = session.query(Tech).filter_by(text=content, company_id=company_id, notice_id=notice_id).first()
     except NoResultFound:
         return None
-
-    if record is not None:
-        print(record.text, record.company_id, record.notice_id)
     return record
+
+
+def find_all_tech_by_notice_id(notice_id: int):
+    session = Session()
+
+    try:
+        record = session.query(Tech).filter_by(notice_id=notice_id).all()
+    except NoResultFound:
+        return None
+    return list(record)

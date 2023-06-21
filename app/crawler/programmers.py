@@ -3,8 +3,7 @@ import json
 import requests
 from sqlalchemy.exc import IntegrityError
 
-from app.db.base import create_notice, create_company, create_tech, select_data_from_table, delete_notice_id, \
-    find_company_by_id, find_tech_by_id
+from app.db.base import create_notice, create_company, create_tech, select_data_from_table, delete_notice_id
 
 
 def update_job_list(cookie):
@@ -28,8 +27,6 @@ def update_job_list(cookie):
 
 
 def update_tech(cookie):
-    count = 0
-
     jobList = select_data_from_table("notice")
 
     for i in jobList:
@@ -41,14 +38,13 @@ def update_tech(cookie):
             cookies={'_programmers_session_production': cookie}
         )
 
-        if response.status_code is requests.codes.UNAUTHORIZED:
+        if response.status_code == 401:
             continue
 
         try:
             response = dict(json.loads(response.text))['jobPosition']
         except KeyError:
-            delete_notice_id(int(i))
-            continue
+            return
 
         name = response['company']['name']
 
