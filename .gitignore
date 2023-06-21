@@ -4,9 +4,6 @@
 # env
 .env
 
-# mysql
-/mysql/data
-
 .idea
 .mypy_cache
 .vscode

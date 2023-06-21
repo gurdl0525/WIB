@@ -1,17 +1,3 @@
-# class LanguageFramework:
-#     list = [
-#         {'Python': ['Django', 'Flask', 'FastAPI', 'DRF(Django REST framework)']},
-#         {'Java': ['Spring', 'Spring Boot']},
-#         {'Kotlin': ['Spring', 'Spring Boot']},
-#         {'PHP': ['Laravel', 'CodeIgniter']},
-#         {'Node.js': ['Puppeteer', 'Apollo Server', 'ExpressJS']},
-#         {'TypeScript': ['Puppeteer', 'Apollo Server', 'ExpressJS']},
-#         {'ReactJS': ['React Native', 'ExpressJS']},
-#         {'Go': ['Ethereum']},
-#         {'Ruby': ['Ruby on Rails']}
-#     ]
-
-
 class FrameWork:
     list = {
         'Django': 'Python',
