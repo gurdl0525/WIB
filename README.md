@@ -20,7 +20,7 @@ I think the best programming language-framework should be used and used well.
 
 ### So what did you make? 🌳
 ---
-나는 프로그래머스라는 사이트의 백엔드 채용 공고를 크롤링해서<br>
+나는 '프로그래머스'라는 사이트의 백엔드 채용 공고를 크롤링해서<br>
 I created an API that crawls the back-end job recruitment notice of a site called 'Programmers'
 
 파이 차트와 막대 그래프로 시각화해서 제공하는 API를 만들었어.<br>
