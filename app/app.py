@@ -5,8 +5,7 @@ from app.core.config import get_setting
 from app.crawler.programmers import update_job_list, update_tech
 from app.db.base import Base, select_data_from_table
 from app.db.session import db_engine
-from app.format.format import data_format, all_format, show_data_format
-import matplotlib.font_manager as fm
+from app.format.format import data_format, all_format, show_data_format, get_cloud_word
 
 SESSION = get_setting().PROGRAMMERS_SESSION
 
@@ -23,14 +22,14 @@ def get_application():
 app = get_application()
 
 
-@app.post("/crawl/job", status_code=201)
+@app.put("/crawl/job", status_code=201)
 def update_joblist_to_crawl():
     if not update_job_list(SESSION):
         return HTTPException(status_code=400, detail='세션이 만료되었습니다')
     return {'message': 'updated job_list now'}
 
 
-@app.post("/crawl/tech", status_code=201)
+@app.put("/crawl/tech", status_code=201)
 def update_tech_to_crawl():
     update_tech(SESSION)
     return {'message': 'updated tech_list now'}
@@ -51,9 +50,13 @@ def get_all_list():
     return all_format()
 
 
+@app.get('/show/all/cloudword')
+def show_all_cloud_word():
+    return FileResponse(get_cloud_word())
+
+
 @app.get('/show/{typ}/{tag}', status_code=200)
 def show_tech_format(typ: str, tag: str):
-
     result = show_data_format(tag, typ)
 
     if result == {'message': 'Invalid Tag Exception'}:
@@ -62,4 +65,3 @@ def show_tech_format(typ: str, tag: str):
         raise HTTPException(status_code=201, detail=result)
 
     return FileResponse(result)
-

@@ -1,9 +1,12 @@
 from collections import Counter
 
 import matplotlib.pyplot as plt
+import numpy as np
 
+from PIL import Image
 from .model.data import FrameWork, Language
 from ..db.base import select_data_from_table, find_all_tech_by_notice_id
+from wordcloud import WordCloud, ImageColorGenerator, STOPWORDS
 
 frameworkList, languageList = FrameWork.list, Language.list
 
@@ -91,7 +94,6 @@ def create_image(value, label, file_name, typ: str):
         plt.rc('font', family='Apple SD Gothic Neo', size=7)
         plt.rcParams['text.color'] = "Black"
         plt.rcParams['axes.unicode_minus'] = False
-        plt.figure(figsize=(8, 5))
         if file_name == 'framework_count_pie':
             plt.title('Framework Count Pie Chart', fontdict={'fontsize': 20})
         else:
@@ -100,11 +102,18 @@ def create_image(value, label, file_name, typ: str):
         colors = []
         for i in range(size):
             colors.append(rainbow[i % 7])
-        plt.pie(value, labels=label, autopct='%1.1f%%', startangle=90, explode=[0.03] * size, wedgeprops={'width': 0.7},
-                colors=colors)
+        plt.pie(
+            value,
+            labels=label,
+            autopct='%1.1f%%',
+            startangle=90,
+            explode=[0.03] * size,
+            wedgeprops={'width': 0.7},
+            colors=colors
+        )
+        plt.tight_layout()
         plt.savefig(f'app/format/img/{file_name}.png', format='png', dpi=200)
     else:
-        plt.figure(figsize=(8, 5))
         if file_name == 'framework_count_bar':
             plt.title('Framework Count Bar Graph', fontdict={'fontsize': 20})
             plt.xlabel('Language-Framework',
@@ -122,6 +131,7 @@ def create_image(value, label, file_name, typ: str):
         plt.grid(True, axis='y', alpha=0.5, color='gray', linestyle='--')
         plt.xticks(size, label, fontdict={'fontsize': 4, 'family': 'Apple SD Gothic Neo', 'color': 'black'})
         plt.ylabel('Count', fontdict={'fontsize': 10, 'family': 'Apple SD Gothic Neo', 'color': 'black'})
+        plt.tight_layout()
         plt.savefig(f'app/format/img/{file_name}.png', format='png', dpi=200)
     plt.cla()
     plt.clf()
@@ -133,3 +143,35 @@ def get_one_percentage(lists: dict):
         result += int(lists[k])
 
     return result / 50
+
+
+def get_cloud_word():
+    techList = select_data_from_table('tech')
+
+    if techList is None:
+        return {'message': '먼저 테크리스트를 업데이트 해주세요'}
+
+    techList = [v['text'] for v in techList]
+
+    bulb = np.array(Image.open('app/format/img/bulb.png'))
+
+    stopwords = set(STOPWORDS)
+    stopwords.add("bulb")
+    stopwords.add("tech")
+
+    wc = WordCloud(background_color="white", max_words=2000, mask=bulb, width=5000, height=5000,
+                   stopwords=stopwords, contour_width=1, contour_color='steelblue')
+
+    tech_str = ''
+
+    for t in techList:
+        tech_str = tech_str + ' ' + t
+
+    wc.generate(tech_str)
+
+    plt.imshow(wc, cmap=plt.cm.gray, interpolation='bilinear')
+    plt.axis("off")
+    plt.tight_layout
+    plt.savefig('app/format/img/cloudword.png', format='png', dpi=200)
+
+    return 'app/format/img/cloudword.png'
