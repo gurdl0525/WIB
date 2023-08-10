@@ -1,12 +1,17 @@
-from sqlalchemy import Column, BIGINT, VARCHAR, ForeignKey
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, BIGINT, VARCHAR, CHAR
+
 from ..base_class import Base
+from enum import Enum
 
 
 class Tech(Base):
     __tablename__ = "tech"
-    text = Column(VARCHAR(200), nullable=False, primary_key=True)
-    company_id = Column(VARCHAR(200), ForeignKey('company.id'), nullable=False, primary_key=True)
-    notice_id = Column(BIGINT, ForeignKey('notice.id'), nullable=False, primary_key=True)
-    company = relationship("Company", back_populates="tech", lazy=True)
-    notice = relationship("Notice", back_populates="tech", lazy=True)
+    id = Column(BIGINT, primary_key=True)
+    text = Column(VARCHAR(50), primary_key=True)
+    type = Column(CHAR(11), primary_key=True)
+    occupational = Column(VARCHAR(20), primary_key=True)
+
+
+class OccupationalP(Enum):
+    BACKEND = 1
+    FRONTEND = 4
