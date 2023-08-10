@@ -12,7 +12,7 @@ COPY ./.env /WIB/.env
 
 COPY main.py /WIB/main.py
 
-CMD ["uvicon", "app:app:app", "--host", "127.0.0.1", "--port", "8000", "--reload"]
+CMD ["uvicon", "app.app:app", "--host", "127.0.0.1", "--port", "8000", "--reload"]
 
 RUN pip install --no-cache-dir --upgrade -r /WIB/requirements.txt
 
