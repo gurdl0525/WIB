@@ -1,54 +1,53 @@
 import json
 
 import requests
+from fastapi import HTTPException
 from sqlalchemy.exc import IntegrityError
 
-from app.db.base import create_notice, create_company, create_tech, select_data_from_table, delete_notice_id
+from app.db.base import create_tech
+from app.db.models.tech import OccupationalP
 
 
-def update_job_list(cookie):
+def crawl_programmers(occ: str):
+    tag: int = None
+
+    for e in OccupationalP:
+        if e.name == occ:
+            tag = e.value
+            break
+
+    if tag is None:
+        raise HTTPException(status_code=400, detail={'message': '잘못된 분야'})
+
     totalPage = int(dict(json.loads(requests.get(
-        url=r'https://career.programmers.co.kr/api/job_positions?order=recent&page=1&job_category_ids[]=1',
-        cookies={'_programmers_session_production': cookie}
+        url=rf'https://career.programmers.co.kr/api/job_positions?order=recent&page=1&job_category_ids[]={tag}'
     ).text))['totalPages'])
 
     for i in range(totalPage + 1)[1::]:
 
         response = dict(json.loads(requests.get(
-            url=f'https://career.programmers.co.kr/api/job_positions?order=recent&page={i}&job_category_ids[]=1',
-            cookies={'_programmers_session_production': cookie}
+            url=rf'https://career.programmers.co.kr/api/job_positions?order=recent&page={i}&job_category_ids[]={tag}'
         ).text))
 
         for j in response['jobPositions']:
             try:
-                create_notice(int(j['id']))
+                update_tech(int(j['id']), occ)
             except IntegrityError:
                 continue
 
+    return
 
-def update_tech(cookie):
-    jobList = select_data_from_table("notice")
 
-    for i in jobList:
+def update_tech(n_id: str or int, occ: str):
+    response = requests.get(url=f'https://career.programmers.co.kr/api/job_positions/{n_id}')
 
-        i = i['id']
+    if response.status_code == 401:
+        return
 
-        response = requests.get(
-            url=f'https://career.programmers.co.kr/api/job_positions/{i}',
-            cookies={'_programmers_session_production': cookie}
-        )
+    try:
+        response = dict(json.loads(response.text))['jobPosition']
+    except KeyError:
+        return
 
-        if response.status_code == 401:
-            continue
-
-        try:
-            response = dict(json.loads(response.text))['jobPosition']
-        except KeyError:
-            return
-
-        name = response['company']['name']
-
-        create_company(name)
-
-        for j in response['technicalTags']:
-            create_tech(j['name'], name, i)
+    for j in response['technicalTags']:
+        create_tech(n_id, j['name'], "PROGRAMMERS", occ)
