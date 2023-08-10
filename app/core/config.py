@@ -11,7 +11,6 @@ class Settings(BaseSettings):
     DB_PASSWORD: str
     SERVER_PORT: int
     SERVER_HOST: str
-    PROGRAMMERS_SESSION: str
     MYSQL_ROOT_PASSWORD: str
 
     class Config:
