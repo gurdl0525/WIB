@@ -1,13 +1,12 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
-from app.core.config import get_setting
-from app.crawler.programmers import update_job_list, update_tech
-from app.db.base import Base, select_data_from_table
+from app.crawler.programmers import crawl_programmers
+from app.crawler.wanted import wanted
+from app.db.base import Base
 from app.db.session import db_engine
-from app.format.format import data_format, all_format, show_data_format, get_cloud_word
-
-SESSION = get_setting().PROGRAMMERS_SESSION
+from app.dto import RequestCrawl, RequestShow, RequestCloudwords
+from app.format.format import show_data_format, get_cloud_word
 
 
 def create_tables():
@@ -22,46 +21,28 @@ def get_application():
 app = get_application()
 
 
-@app.put("/crawl/job", status_code=201)
-def update_joblist_to_crawl():
-    if not update_job_list(SESSION):
-        return HTTPException(status_code=400, detail='세션이 만료되었습니다')
-    return {'message': 'updated job_list now'}
+@app.put("/crawl", status_code=201)
+def crawl_joblist(request: RequestCrawl):
+    if request.typ == 'programmers':
+        crawl_programmers(request.occ)
+    elif request.typ == 'wanted':
+        print('wanted')
+    else:
+        raise HTTPException(status_code=400)
+
+    return {'message': 'updated now'}
 
 
-@app.put("/crawl/tech", status_code=201)
-def update_tech_to_crawl():
-    update_tech(SESSION)
-    return {'message': 'updated tech_list now'}
+@app.get('/show/cloudwords', status_code=200)
+def show_all_cloud_word(request: RequestCloudwords):
+    return FileResponse(get_cloud_word(request.occ))
 
 
-@app.get("/crawl/tech", status_code=200)
-def get_tech_list():
-    return select_data_from_table('tech')
+@app.get('/show', status_code=200)
+def show_tech_format(request: RequestShow):
+    return FileResponse(show_data_format(request.typ, request.tag, request.occ))
 
 
-@app.get("/crawl/tech/format", status_code=200)
-def get_tech_list():
-    return data_format()
-
-
-@app.get('/crawl/all/format', status_code=200)
-def get_all_list():
-    return all_format()
-
-
-@app.get('/show/all/cloudword')
-def show_all_cloud_word():
-    return FileResponse(get_cloud_word())
-
-
-@app.get('/show/{typ}/{tag}', status_code=200)
-def show_tech_format(typ: str, tag: str):
-    result = show_data_format(tag, typ)
-
-    if result == {'message': 'Invalid Tag Exception'}:
-        raise HTTPException(status_code=400, detail=result)
-    elif result == {'message': '먼저 테크리스트를 업데이트 해주세요'}:
-        raise HTTPException(status_code=201, detail=result)
-
-    return FileResponse(result)
+@app.get('/wanted/{n_id}')
+def wanted_api(n_id: str):
+    return wanted(n_id)
