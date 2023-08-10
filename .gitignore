@@ -4,6 +4,9 @@
 # env
 .env
 
+# Images
+/app/format/img/
+
 .idea
 .mypy_cache
 .vscode
