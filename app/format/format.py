@@ -32,7 +32,6 @@ def data_format_p(tag: str, occ: str):
         for v in techList:
 
             if v.text in frameworkList:
-
                 result.append(v.text if v.text != 'DRF(Django REST framework)' else 'Django')
 
     elif tag == 'compound':
@@ -51,9 +50,9 @@ def data_format_p(tag: str, occ: str):
 
                 if isinstance(frameworkList[txt], list):
                     for lang in list(set(l).intersection(frameworkList[txt])):
-                        result.append(lang + '-' + txt if txt != 'DRF(Django REST framework)' else 'Django')
+                        result.append(lang + '\n' + txt if txt != 'DRF(Django REST framework)' else 'Django')
                 else:
-                    result.append(frameworkList[txt] + '-' + txt if txt != 'DRF(Django REST framework)' else 'Django')
+                    result.append(frameworkList[txt] + '\n' + txt if txt != 'DRF(Django REST framework)' else 'Django')
 
             elif txt in languageList:
                 l.append(txt)
@@ -64,19 +63,19 @@ def data_format_p(tag: str, occ: str):
 
 
 def show_data_format(typ: str, tag: str, occ: str):
-
     if typ != 'pie' and typ != 'bar':
         raise HTTPException(status_code=400, detail={'message': 'Invalid Type Exception'})
 
     df = data_format_p(tag, occ)
 
-    lists, value, label = df, [], []
+    lists, value, label, legend = df, [], [], []
 
     onePercentage, etc = get_one_percentage(lists), 0
 
     for k in lists:
         if lists[k] >= onePercentage:
             label.append(k)
+            legend.append(k.replace('\n', '-'))
             value.append(lists[k])
         else:
             etc += lists[k]
@@ -85,12 +84,12 @@ def show_data_format(typ: str, tag: str, occ: str):
         label.append('기타')
         value.append(etc)
 
-    create_image(value, label, f'{tag}_count_{typ}', typ, occ)
+    create_image(value, label, f'{tag}_count_{typ}', typ, occ, legend)
 
     return f'app/format/img/{occ}/{tag}_count_{typ}.png'
 
 
-def create_image(value: list, label: list, file_name: str, typ: str, occ :str):
+def create_image(value: list, label: list, file_name: str, typ: str, occ: str, legend: list):
     rainbow = ['red', 'gold', 'limegreen', 'mediumpurple', 'skyblue', 'dodgerblue', 'darkviolet']
     if typ == 'pie':
         plt.rc('font', family='Apple SD Gothic Neo', size=7)
@@ -128,7 +127,7 @@ def create_image(value: list, label: list, file_name: str, typ: str, occ :str):
         for i in size:
             colors.append(rainbow[i % 7])
         bars = plt.bar(size, value, color=colors, width=0.5)
-        plt.legend(handles=bars, labels=label, prop={'family': 'Apple SD Gothic Neo'})
+        plt.legend(handles=bars, labels=legend, prop={'family': 'Apple SD Gothic Neo', 'size': '8'})
         plt.grid(True, axis='y', alpha=0.5, color='gray', linestyle='--')
         plt.xticks(size, label, fontdict={'fontsize': 4, 'family': 'Apple SD Gothic Neo', 'color': 'black'})
         plt.ylabel('Count', fontdict={'fontsize': 10, 'family': 'Apple SD Gothic Neo', 'color': 'black'})
@@ -184,3 +183,4 @@ def get_cloud_word(occ: str):
     plt.savefig(f'app/format/img/{occ}/cloudword.png', format='png', dpi=300)
 
     return f'app/format/img/{occ}/cloudword.png'
+
