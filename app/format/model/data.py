@@ -14,7 +14,15 @@ class FrameWork:
         'React Native': 'ReactJS',
         'Ethereum': 'Go',
         'Ruby on Rails': 'Ruby',
-        'Dart': 'flutter'
+        'Dart': 'flutter',
+        'ibatis': 'Java',
+        'Next.js': 'TypeScript',
+        'Vert.x': ['Java', 'Kotlin'],
+        'ASP.NET': '.NET',
+        'Jest': ['Node.js', 'TypeScript', 'Vue.js', 'ReactJS'],
+        'Electron': 'Node.js',
+        'Mocha': 'Node.js',
+        'Nest.js': 'TypeScript'
     }
 
 
@@ -36,5 +44,11 @@ class Language:
         'Objective-C',
         'C++',
         'Ruby',
-        'Swift'
+        'Swift',
+        'C',
+        'R',
+        '.NET',
+        'Solidity',
+        'Rust',
+        'Scala'
     ]
