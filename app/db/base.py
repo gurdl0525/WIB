@@ -7,7 +7,35 @@ from .session import SessionLocal
 Session = SessionLocal
 
 
+def toFactor(factor):
+    if factor == 'NodeJS':
+        return 'Node.js'
+    elif factor == 'Embedded C':
+        return 'C'
+    elif factor == '.NET Core':
+        return '.NET'
+    elif factor == 'Vue.JS' or factor == 'VueJS':
+        return 'Vue.js'
+    elif factor == 'React':
+        return 'ReactJS'
+    elif factor == 'iOS 개발' or factor == 'iOS':
+        return 'Swift'
+    elif factor == 'iBatis':
+        return 'ibatis'
+    elif factor == 'C / C++':
+        return 'C++'
+    elif factor == 'ASP .NET':
+        return 'ASP.NET'
+    elif factor == 'Spring Framework':
+        return 'Spring'
+    else:
+        return factor
+
+
 def create_tech(notice_id: int, txt: str, typ: str, occ: str):
+
+    txt = toFactor(txt)
+
     if not exist_tech_by_ids(notice_id=notice_id, txt=txt, typ=typ, occ=occ):
         return
 
