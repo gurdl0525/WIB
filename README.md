@@ -32,6 +32,6 @@ visualizes them into pie charts and bar graphs.
 
 ### Etc
 ---
+Wanted Site : [https://www.wanted.co.kr](https://www.wanted.co.kr/jobsfeed)<br>
 Programmers Site : [https://programmers.co.kr](https://programmers.co.kr/)<br>
-Programmers Site : [https://www.wanted.co.kr](https://www.wanted.co.kr/jobsfeed)<br>
 API Docs : [PostmanDocs](https://documenter.getpostman.com/view/20482645/2s93z3fkm6)
