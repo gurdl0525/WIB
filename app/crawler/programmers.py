@@ -1,4 +1,5 @@
 import json
+import logging
 
 import requests
 from fastapi import HTTPException
@@ -14,6 +15,8 @@ def crawl_programmers(occ: str):
         if o.name == occ:
             occ = o
             break
+
+    logging.info(f'Crawling {occ.name} in programmers')
 
     if isinstance(occ, str):
         raise HTTPException(status_code=400, detail={'message': '잘못된 분야'})
@@ -49,3 +52,4 @@ def crawl_programmers(occ: str):
             except IntegrityError:
                 continue
 
+    logging.info(f'Complete crawling {occ.name} in programmers')
