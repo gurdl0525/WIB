@@ -1,3 +1,6 @@
+import logging
+
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import FileResponse
 
@@ -18,7 +21,11 @@ def get_application():
     return FastAPI()
 
 
+logging.basicConfig(level='INFO')
+
 app = get_application()
+
+scheduler = AsyncIOScheduler(daemon=True, timezone='Asia/Seoul')
 
 
 @app.put("/crawl", status_code=201)
@@ -41,3 +48,10 @@ def show_all_cloud_word(request: RequestCloudwords):
 @app.get('/show', status_code=200)
 def show_tech_format(request: RequestShow):
     return FileResponse(show_data_format(request.typ, request.tag, request.occ))
+
+
+scheduler.add_job(func=crawl_programmers, trigger='cron', day=1, id='crawl_p_b', args=['BACKEND'])
+scheduler.add_job(func=crawl_wanted, trigger='cron', day=1, id='crawl_w_b', args=['BACKEND'])
+scheduler.add_job(func=crawl_programmers, trigger='cron', day=1, id='crawl_p_f', args=['FRONTEND'])
+scheduler.add_job(func=crawl_wanted, trigger='cron', day=1, id='crawl_w_f', args=['FRONTEND'])
+scheduler.start()
