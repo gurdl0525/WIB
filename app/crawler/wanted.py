@@ -1,5 +1,6 @@
 import datetime
 import json
+import logging
 
 import requests
 from fastapi import HTTPException
@@ -10,10 +11,13 @@ from app.db.base import create_tech
 
 
 def crawl_wanted(occ: str):
+
     for o in OccupationalW:
         if o.name == occ:
             occ = o
             break
+
+    logging.info(f'Crawling {occ.name} in wanted')
 
     if isinstance(occ, str):
         raise HTTPException(status_code=400, detail={'message': '잘못된 분야'})
@@ -42,3 +46,5 @@ def crawl_wanted(occ: str):
                 create_tech(n_id, tag['title'], "WANTED", occ.name)
         except IntegrityError:
             continue
+
+    logging.info(f'Complete crawling {occ.name} in wanted')
