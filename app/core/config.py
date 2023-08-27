@@ -27,6 +27,8 @@ class OccupationalP(Enum):
     BACKEND = 1
     FRONTEND = 4
 
+
 class OccupationalW(Enum):
     BACKEND = 669
     FRONTEND = 872
+    ANDROID = 677
