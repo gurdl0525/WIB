@@ -36,7 +36,6 @@ def crawl_joblist(request: RequestCrawl):
         crawl_wanted(request.occ)
     else:
         raise HTTPException(status_code=400)
-
     return {'message': 'updated now'}
 
 
