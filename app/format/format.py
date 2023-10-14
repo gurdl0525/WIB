@@ -112,7 +112,7 @@ def create_image(value: list, label: list, file_name: str, typ: str, occ: str, l
         plt.tight_layout()
         plt.savefig(f'app/format/img/{occ}/{file_name}.png', format='png', dpi=200)
     else:
-        plt.title(file_name.title().replace('_', ' ') + ' Bar Graph', fontdict={'fontsize': 20})
+        plt.title(file_name.title().replace('_', ' ') + ' Graph', fontdict={'fontsize': 20})
         plt.xlabel(
             xlabel='languages' if file_name == 'language_count_bar' else 'Frameworks' if file_name == 'framework_count_bar' else 'Compounds',
             fontdict={
