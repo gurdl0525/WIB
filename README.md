@@ -6,7 +6,7 @@
 가장 좋은 프로그래밍 언어-프레임워크는 무엇일까?<br>
 What is the best programming language-framework?
 
-라는 의문이 들어서 시작하게 되었어.<br>
+라는 의문이 들어서 시작하게 되었다.<br>
 The question arose and began.
 
 <br>
@@ -23,7 +23,7 @@ I think the best programming language-framework should be used and used well.
 나는 '프로그래머스'와 '원티드'의 채용 공고를 크롤링해서<br>
 I created an API that crawls the job postings of both sites "Programmers" and "Wanted"
 
-파이 차트와 막대 그래프로 시각화해서 제공하는 API를 만들었어.<br>
+파이 차트와 막대 그래프로 시각화해서 제공하는 API를 만들었다.<br>
 and visualizes it with pie charts and bar graphs.
 visualizes them into pie charts and bar graphs.
 
