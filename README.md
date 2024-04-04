@@ -13,7 +13,7 @@ The question arose and began.
 
 ### What does best mean? 📮
 ---
-내가 생각하기에 가장 좋은 프로그래밍 언어-프레임워크는 취업이 잘되고 잘 사용되어야 해.<br>
+내가 생각하기에 가장 좋은 프로그래밍 언어-프레임워크는 취업이 잘되고 잘 사용되어야 한다.<br>
 I think the best programming language-framework should be used and used well.
 
 <br>
